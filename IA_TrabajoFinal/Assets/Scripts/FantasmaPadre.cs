@@ -15,31 +15,32 @@ public class FantasmaPadre : MonoBehaviour
     public EnemyBehaviour m_behaviour;
 
     [Header("Pathfinding")]
-    private Vector3 m_posOnPathStart, m_objective, m_initialPos;
+    protected Vector3 m_posOnPathStart, m_objective, m_initialPos;
     public Transform m_player;
     public Node startNode { get; set; }
     public Node goalNode { get; set; }
     public ArrayList pathArray;
-    private float elapsedTime = 0.0f;
+    protected float elapsedTime = 0.0f;
     //Interval time between pathfinding
     public float intervalTime = 1.0f;
 
     public float distanciaAlNodo;
-    Vector3 m_currentDestination;
+    public Vector3 m_currentDestination;
 
-    void Start()
+    public bool m_changeFinalDestination = true;
+    protected void Start()
     {
         pathArray = new ArrayList();
         m_initialPos = transform.position;
         FindPath();
     }
 
-    void Update()
+    protected void Update()
     {
         Movement();
     }
 
-    protected void ChooseBehaviour()
+    protected virtual void ChooseBehaviour()
     {
         switch (m_behaviour)
         {
@@ -55,6 +56,8 @@ public class FantasmaPadre : MonoBehaviour
             default:
                 break;
         }
+
+        m_changeFinalDestination = false;
     }
 
     public virtual void AgressiveBehaviour()
@@ -72,7 +75,7 @@ public class FantasmaPadre : MonoBehaviour
         
     }
 
-    private void Movement()
+    protected void Movement()
     {
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= intervalTime)
@@ -88,28 +91,48 @@ public class FantasmaPadre : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, m_currentDestination, 4 * Time.deltaTime);
         }
 
+        float distanceToFinalObjective = Vector3.Distance(transform.position, m_objective);
+
+        if(distanceToFinalObjective <= .3f)
+        {
+            m_changeFinalDestination = true;
+        }
 
         if (distanciaAlNodo <= .1f)
         {
-            pathArray.RemoveAt(0);
-            m_currentDestination = ((Node)pathArray[0]).m_position;
+            ReachedDestination();
+
+            if (pathArray.Count > 0)
+            {
+                pathArray.RemoveAt(0);
+
+                if (pathArray.Count > 0)
+                    m_currentDestination = ((Node)pathArray[0]).m_position;
+            }
         }
     }
 
-    void FindPath()
+    protected virtual void ReachedDestination()
+    {
+
+    }
+
+    protected void FindPath()
     {
         m_posOnPathStart = transform.position;
-        ChooseBehaviour();
+
+        if (m_changeFinalDestination)
+            ChooseBehaviour();
 
         startNode = new Node(GridManager.instance.GetGridCellCenter(GridManager.instance.GetGridIndex(m_posOnPathStart)));
         goalNode = new Node(GridManager.instance.GetGridCellCenter(GridManager.instance.GetGridIndex(m_objective)));
         pathArray = AStar.FindPath(startNode, goalNode);
 
-        if (m_currentDestination == null)
+        if (m_currentDestination == Vector3.zero)
             m_currentDestination = ((Node)pathArray[0]).m_position;
     }
 
-    void OnDrawGizmos()
+    protected void OnDrawGizmos()
     {
         if (pathArray == null)
             return;
