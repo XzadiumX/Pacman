@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [Header("Enemigos")]
 
+    [SerializeField] float m_timeToReactivateBehaviour;
+
     [SerializeField] List<FantasmaPadre> v_ghosts = new List<FantasmaPadre>();
 
     void Start()
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour
 
             v_ghosts[i].m_changeFinalDestination = true;
             v_ghosts[i].Repath();
+
+            StartCoroutine(ActivateAgain());
         }
     }
 
@@ -47,5 +51,12 @@ public class GameManager : MonoBehaviour
             v_ghosts[i].m_changeFinalDestination = true;
             v_ghosts[i].Repath();
         }
+    }
+
+    IEnumerator ActivateAgain()
+    {
+        yield return new WaitForSeconds(m_timeToReactivateBehaviour);
+
+        GoBack();
     }
 }

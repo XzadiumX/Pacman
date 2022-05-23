@@ -53,14 +53,17 @@
     <UnityVersion>2020.3.19f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Astar\A\TestCode.cs" />
     <Compile Include="Assets\Astar\A\Node.cs" />
     <Compile Include="Assets\Astar\A\PriorityQueue.cs" />
+    <Compile Include="Assets\Scripts\Fantasma_Naranja.cs" />
     <Compile Include="Assets\Astar\A\AStar.cs" />
     <Compile Include="Assets\Scripts\FantasmaPadre.cs" />
     <Compile Include="Assets\Astar\A\GridManager.cs" />
-    <Compile Include="Assets\Scripts\Fantasma_Naranja.cs" />
-    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\SpecialItem.cs" />
+    <Compile Include="Assets\Scripts\EatGhostsItem.cs" />
+    <Compile Include="Assets\Scripts\BreakWallsItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
