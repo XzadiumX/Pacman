@@ -6,20 +6,46 @@ public class GameManager : MonoBehaviour
 {
     [Header("Enemigos")]
 
-    [SerializeField] GameObject m_pinky;
-    [SerializeField] GameObject m_blue;
-    [SerializeField] GameObject m_orangy;
-    [SerializeField] GameObject m_green;
+    [SerializeField] List<FantasmaPadre> v_ghosts = new List<FantasmaPadre>();
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    RunAwayTime();
+
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //    GoBack();
+    }
+
+    public void RunAwayTime()
+    {
+        for (int i = 0; i < v_ghosts.Count; i++)
+        {
+            v_ghosts[i].m_runningAway = true;
+
+            v_ghosts[i].m_behaviourBeforeRunning = v_ghosts[i].m_behaviour;
+            v_ghosts[i].m_behaviour = EnemyBehaviour.RunAway;
+
+            v_ghosts[i].m_changeFinalDestination = true;
+            v_ghosts[i].Repath();
+        }
+    }
+
+    public void GoBack()
+    {
+        for (int i = 0; i < v_ghosts.Count; i++)
+        {
+            v_ghosts[i].m_runningAway = false;
+
+            v_ghosts[i].m_behaviour = v_ghosts[i].m_behaviourBeforeRunning;
+
+            v_ghosts[i].m_changeFinalDestination = true;
+            v_ghosts[i].Repath();
+        }
     }
 }

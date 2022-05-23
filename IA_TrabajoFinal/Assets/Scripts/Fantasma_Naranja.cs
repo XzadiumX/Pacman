@@ -27,6 +27,23 @@ public class Fantasma_Naranja : FantasmaPadre
     protected new void Update()
     {
         base.Update();
+
+        if (!m_runningAway)
+        {
+            float distanciaAlJugador = Vector3.Distance(m_player.transform.position, transform.position);
+
+            if (distanciaAlJugador <= 10)
+            {
+                if (m_behaviour == EnemyBehaviour.Special)
+                    m_behaviour = EnemyBehaviour.Agressive;
+            }
+
+            else
+            {
+                if (m_behaviour == EnemyBehaviour.Agressive)
+                    m_behaviour = EnemyBehaviour.Special;
+            }
+        }   
     }
 
     public override void SpecialBehaviour()

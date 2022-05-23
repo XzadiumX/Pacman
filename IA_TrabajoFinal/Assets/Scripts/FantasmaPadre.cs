@@ -13,6 +13,7 @@ public class FantasmaPadre : MonoBehaviour
 {
     [Header("Behaviour")]
     public EnemyBehaviour m_behaviour;
+    [HideInInspector] public EnemyBehaviour m_behaviourBeforeRunning;
 
     [Header("Pathfinding")]
     protected Vector3 m_posOnPathStart, m_objective, m_initialPos;
@@ -28,6 +29,9 @@ public class FantasmaPadre : MonoBehaviour
     public Vector3 m_currentDestination;
 
     public bool m_changeFinalDestination = true;
+
+    public bool m_runningAway;
+
     protected void Start()
     {
         pathArray = new ArrayList();
@@ -58,6 +62,7 @@ public class FantasmaPadre : MonoBehaviour
         }
 
         m_changeFinalDestination = false;
+
     }
 
     public virtual void AgressiveBehaviour()
@@ -115,6 +120,11 @@ public class FantasmaPadre : MonoBehaviour
     protected virtual void ReachedDestination()
     {
 
+    }
+
+    public void Repath()
+    {
+        FindPath();
     }
 
     protected void FindPath()
